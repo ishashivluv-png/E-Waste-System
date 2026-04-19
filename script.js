@@ -60,3 +60,6 @@ function submitWaste() {
 
     console.log("Signal sent to ESP32:", signal);
 }
+window.onload = function() {
+    document.getElementById("login").style.display = "block";
+};
