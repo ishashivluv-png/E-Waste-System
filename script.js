@@ -1,5 +1,17 @@
-// GLOBAL VARIABLE - Outside functions so it persists
-let totalPoints = 0;
+// Function to get points from storage or start at 0
+function getSavedPoints(username) {
+    let savedData = localStorage.getItem("ewaste_users");
+    let users = savedData ? JSON.parse(savedData) : {};
+    return users[username] || 0;
+}
+
+// Function to save points to storage
+function savePoints(username, points) {
+    let savedData = localStorage.getItem("ewaste_users");
+    let users = savedData ? JSON.parse(savedData) : {};
+    users[username] = points;
+    localStorage.setItem("ewaste_users", JSON.stringify(users));
+}
 
 // 1. TRANSITION FROM QR TO LOGIN
 function startSystem() {
@@ -8,8 +20,10 @@ function startSystem() {
 }
 
 // 2. LOGIN LOGIC
+let currentUser = "";
+
 function login() {
-    const user = document.getElementById("username").value.trim();
+    const user = document.getElementById("username").value.trim().toLowerCase();
     const pass = document.getElementById("password").value.trim();
 
     if (user === "" || pass === "") {
@@ -17,17 +31,18 @@ function login() {
         return;
     }
 
+    currentUser = user; // Store who is logged in
     document.getElementById("login").style.display = "none";
     document.getElementById("main").style.display = "block";
 
     if (user === "admin" && pass === "1234") {
-        showAdmin(user);
+        showAdmin();
     } else {
         showUser(user);
     }
 }
 
-function showAdmin(user) {
+function showAdmin() {
     document.getElementById("adminPage").style.display = "block";
     document.getElementById("userPage").style.display = "none";
     
@@ -43,50 +58,49 @@ function showUser(user) {
     document.getElementById("userPage").style.display = "block";
     document.getElementById("adminPage").style.display = "none";
     document.getElementById("userDisplay").innerText = user;
+
+    // Load existing points for THIS specific user
+    let existingPoints = getSavedPoints(user);
+    document.getElementById("points").innerText = "⭐ Total Points: " + existingPoints;
 }
 
 // 3. WASTE SUBMISSION LOGIC
 function submitWaste() {
     const item = document.getElementById("item").value;
-    let signal = 0;
     let pts = 0;
 
-    // Point and Signal mapping
-    if (item === "Battery") { signal = 1; pts = 10; }
-    else if (item === "PCB") { signal = 2; pts = 20; }
-    else if (item === "Mobile Phone") { signal = 3; pts = 30; }
-    else { signal = 4; pts = 5; }
+    if (item === "Battery") pts = 10;
+    else if (item === "PCB") pts = 20;
+    else if (item === "Mobile Phone") pts = 30;
+    else pts = 5;
 
-    // Increment points
-    totalPoints += pts;
+    // Get current total, add new points, and save
+    let currentTotal = getSavedPoints(currentUser);
+    currentTotal += pts;
+    savePoints(currentUser, currentTotal);
     
     // Update UI
-    document.getElementById("points").innerText = "⭐ Total Points: " + totalPoints;
+    document.getElementById("points").innerText = "⭐ Total Points: " + currentTotal;
     
     const rewardElement = document.getElementById("reward");
 
-    // Check for Coupon Milestone (100 Points)
-    if (totalPoints >= 100) {
+    if (currentTotal >= 100) {
         rewardElement.innerHTML = `
             <div class="coupon-box">
                 <p>🎉 Milestone Reached: 100+ Points!</p>
                 <button onclick="claimCoupon()">Get the coupon & Reset</button>
             </div>`;
     } else {
-        rewardElement.innerText = "Signal " + signal + " sent! Points earned: " + pts;
+        rewardElement.innerText = "Points added! You earned " + pts + " extra points.";
     }
-    
-    console.log("Signal to ESP32: " + signal + " | Current Points: " + totalPoints);
 }
 
 // 4. CLAIM AND RESET LOGIC
 function claimCoupon() {
-    alert("CONGRATULATIONS!\nYour Coupon: E-HERO-2026\n\nPoints will now reset to zero.");
+    alert("CONGRATULATIONS!\nYour Coupon: E-HERO-2026\n\nPoints for " + currentUser + " will reset.");
     
-    // Reset points
-    totalPoints = 0;
+    savePoints(currentUser, 0); // Reset in storage
     
-    // Reset UI
     document.getElementById("points").innerText = "⭐ Total Points: 0";
     document.getElementById("reward").innerText = "Submit waste to start earning points again!";
 }
