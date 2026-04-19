@@ -1,11 +1,14 @@
-// Function to get points from storage or start at 0
+// GLOBAL DATA - Keeps track of user points in the browser's memory
+let currentUser = "";
+
+// Helper: Get points from storage
 function getSavedPoints(username) {
     let savedData = localStorage.getItem("ewaste_users");
     let users = savedData ? JSON.parse(savedData) : {};
     return users[username] || 0;
 }
 
-// Function to save points to storage
+// Helper: Save points to storage
 function savePoints(username, points) {
     let savedData = localStorage.getItem("ewaste_users");
     let users = savedData ? JSON.parse(savedData) : {};
@@ -13,15 +16,13 @@ function savePoints(username, points) {
     localStorage.setItem("ewaste_users", JSON.stringify(users));
 }
 
-// 1. TRANSITION FROM QR TO LOGIN
+// 1. SYSTEM START (QR -> LOGIN)
 function startSystem() {
     document.getElementById("qr-container").style.display = "none";
     document.getElementById("login").style.display = "block";
 }
 
 // 2. LOGIN LOGIC
-let currentUser = "";
-
 function login() {
     const user = document.getElementById("username").value.trim().toLowerCase();
     const pass = document.getElementById("password").value.trim();
@@ -31,76 +32,81 @@ function login() {
         return;
     }
 
-    currentUser = user; // Store who is logged in
+    currentUser = user; 
     document.getElementById("login").style.display = "none";
     document.getElementById("main").style.display = "block";
 
     if (user === "admin" && pass === "1234") {
-        showAdmin();
+        document.getElementById("adminPage").style.display = "block";
+        document.getElementById("userPage").style.display = "none";
+        loadAdminData();
     } else {
-        showUser(user);
+        document.getElementById("userPage").style.display = "block";
+        document.getElementById("adminPage").style.display = "none";
+        document.getElementById("userDisplay").innerText = user;
+        
+        // Display points for this specific user
+        let points = getSavedPoints(user);
+        document.getElementById("points").innerText = "⭐ Total Points: " + points;
     }
 }
 
-function showAdmin() {
-    document.getElementById("adminPage").style.display = "block";
-    document.getElementById("userPage").style.display = "none";
-    
-    // Simulate sensor data
+// 3. ADMIN DATA SIMULATION
+function loadAdminData() {
     document.getElementById("temp").innerText = "31°C";
-    document.getElementById("gas").innerText = "Normal";
+    document.getElementById("gas").innerText = "Safe";
     document.getElementById("dust").innerText = "Low";
-    document.getElementById("level").innerText = "75% Full";
-    document.getElementById("alert").innerText = "⚠ Warning: Bin is nearing capacity.";
+    document.getElementById("level").innerText = "45% Full";
 }
 
-function showUser(user) {
-    document.getElementById("userPage").style.display = "block";
-    document.getElementById("adminPage").style.display = "none";
-    document.getElementById("userDisplay").innerText = user;
-
-    // Load existing points for THIS specific user
-    let existingPoints = getSavedPoints(user);
-    document.getElementById("points").innerText = "⭐ Total Points: " + existingPoints;
-}
-
-// 3. WASTE SUBMISSION LOGIC
+// 4. WASTE SUBMISSION & SERVO LOGIC
 function submitWaste() {
     const item = document.getElementById("item").value;
     let pts = 0;
+    let targetAngle = 0; 
 
-    if (item === "Battery") pts = 10;
-    else if (item === "PCB") pts = 20;
-    else if (item === "Mobile Phone") pts = 30;
-    else pts = 5;
+    // Define Angles for the Servo to drop into specific compartments
+    if (item === "Battery") {
+        pts = 10;
+        targetAngle = 45;
+    } else if (item === "PCB") {
+        pts = 20;
+        targetAngle = 90;
+    } else if (item === "Mobile Phone") {
+        pts = 30;
+        targetAngle = 135;
+    } else {
+        pts = 5;
+        targetAngle = 180;
+    }
 
-    // Get current total, add new points, and save
+    // A. Update Points Logic
     let currentTotal = getSavedPoints(currentUser);
     currentTotal += pts;
     savePoints(currentUser, currentTotal);
     
-    // Update UI
+    // B. Update UI
     document.getElementById("points").innerText = "⭐ Total Points: " + currentTotal;
     
     const rewardElement = document.getElementById("reward");
-
     if (currentTotal >= 100) {
         rewardElement.innerHTML = `
             <div class="coupon-box">
-                <p>🎉 Milestone Reached: 100+ Points!</p>
+                <p>🎉 Milestone Reached!</p>
                 <button onclick="claimCoupon()">Get the coupon & Reset</button>
             </div>`;
     } else {
-        rewardElement.innerText = "Points added! You earned " + pts + " extra points.";
+        rewardElement.innerText = `Sending to ${item} Bin (${targetAngle}°). You earned ${pts} pts!`;
     }
+
+    // C. Send signal to console (Hardware Trigger)
+    console.log(`ACTION: Servo move to ${targetAngle} deg, then return to 0 deg.`);
 }
 
-// 4. CLAIM AND RESET LOGIC
+// 5. COUPON & RESET
 function claimCoupon() {
-    alert("CONGRATULATIONS!\nYour Coupon: E-HERO-2026\n\nPoints for " + currentUser + " will reset.");
-    
-    savePoints(currentUser, 0); // Reset in storage
-    
+    alert("Coupon Code: E-WASTE-2026\nPoints for " + currentUser + " will reset.");
+    savePoints(currentUser, 0);
     document.getElementById("points").innerText = "⭐ Total Points: 0";
-    document.getElementById("reward").innerText = "Submit waste to start earning points again!";
+    document.getElementById("reward").innerText = "Points reset successfully!";
 }
