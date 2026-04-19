@@ -1,63 +1,83 @@
 body {
     text-align: center;
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f7f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e8f5e9;
+    color: #2e7d32;
     margin: 0;
     padding: 20px;
 }
 
 #qr-container, #login, #adminPage, #userPage {
     background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    max-width: 350px;
-    margin: auto;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-h2 { color: #2d5a27; }
+h1 { color: #1b5e20; margin-top: 0; }
+h2 { color: #388e3c; }
 
 input, select {
     width: 90%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    font-size: 1rem;
 }
 
 button {
-    background-color: #4CAF50;
+    width: 95%;
+    padding: 12px;
+    background-color: #4caf50;
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 8px;
     font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-button:hover { background-color: #45a049; }
+button:hover {
+    background-color: #2e7d32;
+    transform: translateY(-2px);
+}
 
-.stats-card {
+.stats-container {
     text-align: left;
-    background: #f9f9f9;
-    padding: 10px;
-    border-left: 5px solid #4CAF50;
+    background: #f1f8e9;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #4caf50;
 }
 
-#alert { font-weight: bold; margin-top: 15px; }
+.score-card {
+    margin-top: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border: 2px solid #a5d6a7;
+    border-radius: 15px;
+}
+
+#alert {
+    color: #d32f2f;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
 .coupon-box {
     margin-top: 15px;
     padding: 15px;
-    border: 2px dashed #4CAF50; /* Dashed line makes it look like a cutout coupon */
+    border: 2px dashed #4caf50;
     background-color: #f1f8e9;
-    font-weight: bold;
-    font-size: 1.2rem;
     border-radius: 10px;
-    animation: bounce 0.5s ease; /* Adds a little pop-up effect */
+    animation: popIn 0.5s ease;
 }
 
-@keyframes bounce {
-    0% { transform: scale(0.9); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
