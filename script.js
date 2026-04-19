@@ -5,27 +5,42 @@ function submitWaste() {
     let signal = 0;
     let pts = 0;
 
-    // Logic for points based on item
+    // 1. Assign points based on selection
     if (item === "Battery") { signal = 1; pts = 10; }
     else if (item === "PCB") { signal = 2; pts = 20; }
     else if (item === "Mobile Phone") { signal = 3; pts = 30; }
     else { signal = 4; pts = 5; }
 
+    // 2. Add to total (The += ensures it accumulates)
     totalPoints += pts;
     
-    // Update the UI
+    // 3. Update the UI
     document.getElementById("points").innerText = "⭐ Total Points: " + totalPoints;
     
-    // Check for the Coupon Milestone
     let rewardElement = document.getElementById("reward");
-    
+
+    // 4. Check if they hit the 100 point milestone
     if (totalPoints >= 100) {
-        rewardElement.innerHTML = "<div class='coupon-box'>🎉 Get the coupon! <br> Code: GREEN100</div>";
-        rewardElement.style.color = "#2e7d32";
+        rewardElement.innerHTML = `
+            <div class="coupon-box">
+                <p>🎉 Milestone Reached!</p>
+                <button onclick="claimCoupon()">Claim Coupon & Reset</button>
+            </div>`;
     } else {
-        rewardElement.innerText = "Signal " + signal + " sent! You earned " + pts + " points.";
-        rewardElement.style.color = "#555";
+        rewardElement.innerText = "Signal " + signal + " sent! Points earned: " + pts;
     }
     
-    console.log("ESP32 Signal:", signal);
+    console.log("ESP32 Signal:", signal, "Total Points:", totalPoints);
+}
+
+// NEW FUNCTION: Handles the claim and the reset
+function claimCoupon() {
+    alert("Your Coupon Code: E-WASTE-HERO-2026\nPoints will now reset.");
+    
+    // Reset Logic
+    totalPoints = 0;
+    
+    // Update UI back to zero
+    document.getElementById("points").innerText = "⭐ Total Points: 0";
+    document.getElementById("reward").innerText = "Points reset. Start collecting again!";
 }
