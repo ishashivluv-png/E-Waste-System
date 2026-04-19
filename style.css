@@ -45,3 +45,19 @@ button:hover { background-color: #45a049; }
 }
 
 #alert { font-weight: bold; margin-top: 15px; }
+.coupon-box {
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px dashed #4CAF50; /* Dashed line makes it look like a cutout coupon */
+    background-color: #f1f8e9;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    animation: bounce 0.5s ease; /* Adds a little pop-up effect */
+}
+
+@keyframes bounce {
+    0% { transform: scale(0.9); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
