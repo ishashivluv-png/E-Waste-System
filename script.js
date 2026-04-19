@@ -29,37 +29,34 @@ function login() {
         document.getElementById("userDisplay").innerText = user;
     }
 }
+let totalPoints = 0;
+
 function submitWaste() {
     let item = document.getElementById("item").value;
-    let sendValue = "";
 
-if (item === "Battery") sendValue = "1";
-else if (item === "PCB") sendValue = "2";
-else if (item === "Mobile Phone") sendValue = "3";
-else sendValue = "4";
+    let signal = 0;
 
-console.log("Send to ESP32:", sendValue);
-
-    let points = 0;
-
-    if (item === "Mobile Phone") points = 50;
-else if (item === "PCB") points = 40;
-else if (item === "Battery") points = 30;
-else points = 10;
-    totalPoints += points;
-
-    document.getElementById("points").innerText =
-        "Total Points: " + totalPoints;
-
-    if (totalPoints >= 100) {
-        document.getElementById("reward").innerText =
-        "🎉 Congrats! You unlocked Gold Reward!";
+    if (item === "Battery") {
+        signal = 1;
+        totalPoints += 10;
+    } else if (item === "PCB") {
+        signal = 2;
+        totalPoints += 20;
+    } else if (item === "Mobile Phone") {
+        signal = 3;
+        totalPoints += 30;
+    } else {
+        signal = 4;
+        totalPoints += 5;
     }
-}
-function logout() {
-    location.reload();
-}
-function showLogin() {
-    document.getElementById("qrPage").style.display = "none";
-    document.getElementById("login").style.display = "block";
+
+    // Show points
+    document.getElementById("points").innerText =
+        "⭐ Total Points: " + totalPoints;
+
+    // Show signal (important for demo)
+    document.getElementById("reward").innerText =
+        "Sent Signal: " + signal;
+
+    console.log("Signal sent to ESP32:", signal);
 }
