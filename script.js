@@ -1,5 +1,6 @@
 let totalPoints = 0;
 
+// LOGIN FUNCTION
 function login() {
     let user = document.getElementById("username").value;
     let pass = document.getElementById("password").value;
@@ -12,7 +13,6 @@ function login() {
         document.getElementById("adminPage").style.display = "block";
         document.getElementById("userPage").style.display = "none";
 
-        // Dummy sensor values
         document.getElementById("temp").innerText = "30°C";
         document.getElementById("gas").innerText = "Normal";
         document.getElementById("dust").innerText = "Low";
@@ -29,8 +29,8 @@ function login() {
         document.getElementById("userDisplay").innerText = user;
     }
 }
-let totalPoints = 0;
 
+// WASTE SUBMIT FUNCTION
 function submitWaste() {
     let item = document.getElementById("item").value;
 
@@ -50,16 +50,16 @@ function submitWaste() {
         totalPoints += 5;
     }
 
-    // Show points
     document.getElementById("points").innerText =
         "⭐ Total Points: " + totalPoints;
 
-    // Show signal (important for demo)
     document.getElementById("reward").innerText =
         "Sent Signal: " + signal;
 
     console.log("Signal sent to ESP32:", signal);
 }
+
+// PAGE LOAD CONTROL
 window.onload = function() {
     document.getElementById("login").style.display = "block";
     document.getElementById("qr").style.display = "none";
