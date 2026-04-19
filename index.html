@@ -1,68 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Waste System</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <h2>Scan QR Code to Open System</h2>
-<div id="qr">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ishashivluv-png.github.io/E-Waste-System/">
-</div>
-<br><br>
 
-<div id="login" style="display:none;">
-    <h2>Login</h2>
-
-    <input type="text" id="username" placeholder="Username"><br><br>
-    <input type="password" id="password" placeholder="Password"><br><br>
-
-    <button onclick="login()">Login</button>
-</div>
-
-
-
-
-
-<!-- MAIN PAGE -->
-<div id="main" style="display:none;">
-
-    <!-- ADMIN PAGE -->
-    <div id="adminPage" style="display:none;">
-        <h2>Welcome Admin</h2>
-
-        <p>Temperature: <span id="temp"></span></p>
-        <p>Gas Sensor: <span id="gas"></span></p>
-        <p>Dust Level: <span id="dust"></span></p>
-        <p>Bin Level: <span id="level"></span></p>
-
-        <p id="alert"></p>
+    <div id="qr-container">
+        <h2>Scan QR Code to Open System</h2>
+        <div id="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ishashivluv-png.github.io/E-Waste-System/" alt="QR Code">
+        </div>
+        <p>Use your phone to manage the bin</p>
+        <button onclick="startSystem()">Enter System</button>
     </div>
 
-    <!-- USER PAGE -->
-    <div id="userPage" style="display:none;">
+    <div id="login" style="display:none;">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username"><br>
+        <input type="password" id="password" placeholder="Password"><br><br>
+        <button onclick="login()">Login</button>
+    </div>
 
-        <h2>Welcome, <span id="userDisplay"></span></h2>
+    <div id="main" style="display:none;">
 
-        <select id="item">
-            <option>Battery</option>
-            <option>PCB</option>
-            <option>Mobile Phone</option>
-            <option>Others</option>
-        </select>
+        <div id="adminPage" style="display:none;">
+            <h2>Admin Dashboard</h2>
+            <div class="stats-card">
+                <p>🌡️ Temperature: <span id="temp">--</span></p>
+                <p>💨 Gas Sensor: <span id="gas">--</span></p>
+                <p>🧹 Dust Level: <span id="dust">--</span></p>
+                <p>🗑️ Bin Level: <span id="level">--</span></p>
+            </div>
+            <p id="alert"></p>
+        </div>
 
-        <br><br>
-        <button onclick="submitWaste()">Submit</button>
-
-        <h3 id="points"></h3>
-        <h3 id="reward"></h3>
+        <div id="userPage" style="display:none;">
+            <h2>Welcome, <span id="userDisplay"></span></h2>
+            <p>Select item to dispose:</p>
+            <select id="item">
+                <option value="Battery">Battery</option>
+                <option value="PCB">PCB</option>
+                <option value="Mobile Phone">Mobile Phone</option>
+                <option value="Others">Others</option>
+            </select>
+            <br><br>
+            <button onclick="submitWaste()">Submit Waste</button>
+            <h3 id="points">⭐ Points: 0</h3>
+            <h3 id="reward"></h3>
+        </div>
 
     </div>
 
-</div>
-<!-- ADD HERE -->
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
