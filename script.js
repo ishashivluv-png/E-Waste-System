@@ -1,4 +1,8 @@
-// GLOBAL DATA - Keeps track of user points in the browser's memory
+// --- HARDWARE CONNECTION ---
+// Paste your IP Address from the Serial Monitor between the quotes below
+const esp32_ip = "10.153.82.154"; 
+
+// GLOBAL DATA - Keeps track of user points
 let currentUser = "";
 
 // Helper: Get points from storage
@@ -39,68 +43,57 @@ function login() {
     if (user === "admin" && pass === "1234") {
         document.getElementById("adminPage").style.display = "block";
         document.getElementById("userPage").style.display = "none";
-        loadAdminData();
+        // Start fetching real data every 3 seconds
+        setInterval(loadAdminData, 3000);
     } else {
         document.getElementById("userPage").style.display = "block";
         document.getElementById("adminPage").style.display = "none";
         document.getElementById("userDisplay").innerText = user;
         
-        // Display points for this specific user
         let points = getSavedPoints(user);
         document.getElementById("points").innerText = "⭐ Total Points: " + points;
     }
 }
 
-// 3. ADMIN DATA SIMULATION
-function loadAdminData() {
-    document.getElementById("temp").innerText = "31°C";
-    document.getElementById("gas").innerText = "Safe";
-    document.getElementById("dust").innerText = "Low";
-    document.getElementById("level").innerText = "45% Full";
+// 3. REAL HARDWARE DATA FETCHING
+async function loadAdminData() {
+    try {
+        const response = await fetch(`http://${esp32_ip}/data`);
+        const data = await response.json();
+
+        document.getElementById("temp").innerText = data.temperature + "°C";
+        document.getElementById("gas").innerText = data.gas_status;
+        document.getElementById("level").innerText = data.bin_level + "% Full";
+        document.getElementById("dust").innerText = data.dust_level || "Normal";
+    } catch (error) {
+        console.log("Hardware not connected yet. Check IP or Wi-Fi.");
+    }
 }
 
-// 4. WASTE SUBMISSION & SERVO LOGIC
-function submitWaste() {
+// 4. WASTE SUBMISSION & PHYSICAL SERVO MOVEMENT
+async function submitWaste() {
     const item = document.getElementById("item").value;
     let pts = 0;
     let targetAngle = 0; 
 
-    // Define Angles for the Servo to drop into specific compartments
-    if (item === "Battery") {
-        pts = 10;
-        targetAngle = 45;
-    } else if (item === "PCB") {
-        pts = 20;
-        targetAngle = 90;
-    } else if (item === "Mobile Phone") {
-        pts = 30;
-        targetAngle = 135;
-    } else {
-        pts = 5;
-        targetAngle = 180;
-    }
+    if (item === "Battery") { pts = 10; targetAngle = 45; }
+    else if (item === "PCB") { pts = 20; targetAngle = 90; }
+    else if (item === "Mobile Phone") { pts = 30; targetAngle = 135; }
+    else { pts = 5; targetAngle = 180; }
 
-    // A. Update Points Logic
+    // A. Update Points
     let currentTotal = getSavedPoints(currentUser);
     currentTotal += pts;
     savePoints(currentUser, currentTotal);
-    
-    // B. Update UI
     document.getElementById("points").innerText = "⭐ Total Points: " + currentTotal;
     
-    const rewardElement = document.getElementById("reward");
-    if (currentTotal >= 100) {
-        rewardElement.innerHTML = `
-            <div class="coupon-box">
-                <p>🎉 Milestone Reached!</p>
-                <button onclick="claimCoupon()">Get the coupon & Reset</button>
-            </div>`;
-    } else {
-        rewardElement.innerText = `Sending to ${item} Bin (${targetAngle}°). You earned ${pts} pts!`;
+    // B. TELL THE PHYSICAL SERVO TO MOVE
+    try {
+        await fetch(`http://${esp32_ip}/servo?angle=${targetAngle}`);
+        document.getElementById("reward").innerText = `Sending to ${item} Bin. You earned ${pts} pts!`;
+    } catch (error) {
+        document.getElementById("reward").innerText = "Waste recorded, but Bin Hardware is Offline.";
     }
-
-    // C. Send signal to console (Hardware Trigger)
-    console.log(`ACTION: Servo move to ${targetAngle} deg, then return to 0 deg.`);
 }
 
 // 5. COUPON & RESET
