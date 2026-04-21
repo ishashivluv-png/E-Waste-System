@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;
     margin: 0;
     display: flex;
@@ -8,61 +8,58 @@ body {
     min-height: 100vh;
 }
 
-.card, #qr-container {
+.card {
     background: white;
     padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 320px;
+    border-radius: 25px; /* Matches your photo's soft corners */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    width: 340px;
     text-align: center;
-}
-
-h1, h2 { color: #333; margin-bottom: 15px; }
-
-input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 10px;
     box-sizing: border-box;
 }
 
-.btn-green {
-    background-color: #00873c;
-    color: white;
-    border: none;
-    padding: 15px;
+h1 { font-size: 1.5rem; color: #1a1a1a; }
+h2 { font-size: 1.2rem; color: #444; }
+
+input, select {
     width: 100%;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 1rem;
 }
 
-.btn-green:hover { background-color: #007032; }
+.btn-green {
+    background-color: #00873c; /* Exact green from your image */
+    color: white;
+    border: none;
+    padding: 16px;
+    width: 100%;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
 
 .score-card {
-    background: #fdf2f2;
-    border: 1px solid #ffcfcf;
+    background: #fff5f5; /* Light pinkish background */
+    border: 1px solid #ffe3e3;
     border-radius: 15px;
     padding: 15px;
     margin-top: 20px;
 }
 
-.btn-logout {
-    background: none;
-    border: none;
-    color: #888;
-    text-decoration: underline;
-    margin-top: 15px;
-    cursor: pointer;
-}
-
-.stats-container p {
+.stat-item {
     text-align: left;
     background: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 8px 0;
 }
+
+.error-text { color: #d63031; font-size: 0.8rem; }
+.sub-text { color: #777; font-size: 0.9rem; margin-bottom: 15px; }
+.btn-logout { background: none; border: none; color: #999; text-decoration: underline; margin-top: 15px; cursor: pointer; }
