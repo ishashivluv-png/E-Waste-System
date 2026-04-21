@@ -12,52 +12,53 @@
         <h1>E-Waste Bin System</h1>
         <h2>Scan QR Code to Open System</h2>
         <div id="qr">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ishashivluv-png.github.io/E-Waste-System/" alt="System QR">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://10.41.72.154" alt="System QR">
         </div>
         <p>Manage waste disposal from your mobile device.</p>
-        <button onclick="startSystem()">Enter System</button>
+        <button class="btn-green" onclick="startSystem()">Enter System</button>
     </div>
 
-    <div id="login" style="display:none;">
+    <div id="login" class="card" style="display:none;">
         <h2>System Login</h2>
         <div class="input-group">
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
         </div>
-        <button onclick="login()">Login</button>
+        <button class="btn-green" onclick="login()">Login</button>
+        <p id="login-error" style="color:red; font-size:12px;"></p>
     </div>
 
     <div id="main" style="display:none;">
 
-        <div id="adminPage" style="display:none;">
+        <div id="adminPage" class="card" style="display:none;">
             <h2>Admin Dashboard</h2>
             <div class="stats-container">
-                <p>🌡️ <strong>Temperature:</strong> <span id="temp">--</span></p>
-                <p>💨 <strong>Gas Sensor:</strong> <span id="gas">--</span></p>
-                <p>🧹 <strong>Dust Level:</strong> <span id="dust">--</span></p>
-                <p>🗑️ <strong>Bin Level:</strong> <span id="level">--</span></p>
+                <p>🌡️ <strong>Temp:</strong> <span id="temp">--</span>°C</p>
+                <p>💨 <strong>Gas:</strong> <span id="gas">--</span></p>
+                <p>🗑️ <strong>Bin Fill:</strong> <span id="level">--</span>%</p>
             </div>
-            <p id="alert"></p>
+            <div id="alert"></div>
+            <button class="btn-logout" onclick="location.reload()">Logout</button>
         </div>
 
-        <div id="userPage" style="display:none;">
+        <div id="userPage" class="card" style="display:none;">
             <h2>Welcome, <span id="userDisplay"></span></h2>
-            <p>Select the item you are disposing:</p>
+            <p class="sub-text">Select the item you are disposing:</p>
             
             <select id="item">
-                <option value="Battery">Battery (10 pts)</option>
-                <option value="PCB">PCB (20 pts)</option>
-                <option value="Mobile Phone">Mobile Phone (30 pts)</option>
-                <option value="Others">Others (5 pts)</option>
+                <option value="battery">Battery (10 pts)</option>
+                <option value="pcb">PCB (20 pts)</option>
+                <option value="mobile">Mobile Phone (30 pts)</option>
+                <option value="others">Others (5 pts)</option>
             </select>
-            <br><br>
             
-            <button onclick="submitWaste()">Submit Waste</button>
+            <button class="btn-green" onclick="submitWaste()">Submit Waste</button>
 
             <div class="score-card">
                 <h3 id="points">⭐ Total Points: 0</h3>
                 <div id="reward">Points are added after each submission.</div>
             </div>
+            <button class="btn-logout" onclick="location.reload()">Logout</button>
         </div>
 
     </div>
