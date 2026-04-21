@@ -1,65 +1,68 @@
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #eef2f3;
+    background-color: #f0f2f5;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    min-height: 100vh;
 }
 
-.card {
+.card, #qr-container {
     background: white;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     width: 320px;
     text-align: center;
 }
 
-.hidden { display: none; }
+h1, h2 { color: #333; margin-bottom: 15px; }
 
-input {
+input, select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.btn-primary { background: #2ecc71; color: white; }
-.btn-item { background: #34495e; color: white; margin: 5px 0; }
-.btn-logout { background: transparent; color: #7f8c8d; font-size: 0.8rem; }
-
-.alert-box {
-    background: #ff7675;
+.btn-green {
+    background-color: #00873c;
     color: white;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    animation: blink 1s infinite;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
-.points-display { font-size: 2.5rem; color: #2ecc71; margin: 15px 0; }
+.btn-green:hover { background-color: #007032; }
 
-.coupon-box {
-    background: #dff9fb;
-    border: 2px dashed #2ecc71;
-    padding: 10px;
-    color: #130f40;
+.score-card {
+    background: #fdf2f2;
+    border: 1px solid #ffcfcf;
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
 }
 
-.error { color: #d63031; font-size: 0.8rem; }
+.btn-logout {
+    background: none;
+    border: none;
+    color: #888;
+    text-decoration: underline;
+    margin-top: 15px;
+    cursor: pointer;
+}
 
-@keyframes blink { 50% { opacity: 0.5; } }
+.stats-container p {
+    text-align: left;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+}
