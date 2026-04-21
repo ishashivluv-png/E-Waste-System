@@ -8,13 +8,13 @@
 </head>
 <body>
 
-    <div id="qr-container">
+    <div id="qr-container" class="card">
         <h1>E-Waste Bin System</h1>
         <h2>Scan QR Code to Open System</h2>
         <div id="qr">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://10.41.72.154" alt="System QR">
         </div>
-        <p>Manage waste disposal from your mobile device.</p>
+        <p class="sub-text">Manage waste disposal from your mobile device.</p>
         <button class="btn-green" onclick="startSystem()">Enter System</button>
     </div>
 
@@ -25,17 +25,17 @@
             <input type="password" id="password" placeholder="Password">
         </div>
         <button class="btn-green" onclick="login()">Login</button>
-        <p id="login-error" style="color:red; font-size:12px;"></p>
+        <p id="login-error" class="error-text"></p>
     </div>
 
     <div id="main" style="display:none;">
-
+        
         <div id="adminPage" class="card" style="display:none;">
             <h2>Admin Dashboard</h2>
             <div class="stats-container">
-                <p>🌡️ <strong>Temp:</strong> <span id="temp">--</span>°C</p>
-                <p>💨 <strong>Gas:</strong> <span id="gas">--</span></p>
-                <p>🗑️ <strong>Bin Fill:</strong> <span id="level">--</span>%</p>
+                <div class="stat-item">🌡️ <strong>Temp:</strong> <span id="temp">--</span>°C</div>
+                <div class="stat-item">💨 <strong>Gas:</strong> <span id="gas">--</span></div>
+                <div class="stat-item">🗑️ <strong>Bin Level:</strong> <span id="level">--</span>%</div>
             </div>
             <div id="alert"></div>
             <button class="btn-logout" onclick="location.reload()">Logout</button>
@@ -56,11 +56,10 @@
 
             <div class="score-card">
                 <h3 id="points">⭐ Total Points: 0</h3>
-                <div id="reward">Points are added after each submission.</div>
+                <div class="reward-text">Points are added after each submission.</div>
             </div>
             <button class="btn-logout" onclick="location.reload()">Logout</button>
         </div>
-
     </div>
 
     <script src="script.js"></script>
