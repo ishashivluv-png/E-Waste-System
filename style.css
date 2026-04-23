@@ -1,58 +1,15 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
-}
-
-.card {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.button-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-
-button {
-    padding: 15px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover { background: #0056b3; }
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.stat {
-    padding: 10px;
-    background: #e9ecef;
-    border-radius: 10px;
-}
-
-.stat span { display: block; font-size: 12px; color: #666; }
-
+body { font-family: 'Arial', sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+.container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
 .hidden { display: none; }
+.alert-banner { background: #ff4757; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; animation: blink 1s infinite; }
+@keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
 
-#coupon-box {
-    margin-top: 20px;
-    padding: 10px;
-    border: 2px dashed #28a745;
-    color: #28a745;
-}
+.point-circle { width: 100px; height: 100px; border: 5px solid #2ecc71; border-radius: 50%; margin: 20px auto; display: flex; flex-direction: column; justify-content: center; }
+#user-points { font-size: 28px; font-weight: bold; color: #2ecc71; }
+
+.button-grid button { width: 100%; padding: 12px; margin: 5px 0; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+.btn-bat { background: #f39c12; }
+.btn-pcb { background: #9b59b6; }
+.btn-oth { background: #3498db; }
+.reward { background: #dff9fb; border: 2px dashed #2ecc71; padding: 15px; margin-top: 15px; border-radius: 10px; }
+input { width: 90%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; }
