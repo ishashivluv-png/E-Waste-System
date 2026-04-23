@@ -1,8 +1,12 @@
-const espIP = "http://10.214.127.154"; // SET YOUR ESP32 IP HERE
+// REPLACE WITH YOUR ACTUAL ESP32 IP
+const espIP = "http://10.214.127.154"
+; 
+
+// Local storage simulates a database of users
 let users = JSON.parse(localStorage.getItem('ecoUsers')) || {}; 
 let currentUser = null;
 
-// 1. Generate QR Code
+// Generate QR Code on the laptop screen
 new QRCode(document.getElementById("qrcode"), window.location.href);
 
 function showLogin() {
@@ -10,42 +14,49 @@ function showLogin() {
     document.getElementById('login-screen').classList.remove('hidden');
 }
 
-// 2. Auth Logic: Registration and Login
 function handleAuth() {
     const u = document.getElementById('username').value.trim();
     const p = document.getElementById('password').value;
     const error = document.getElementById('error-msg');
 
-    if (u === "admin" && p === "admin123") {
-        showScreen('admin-screen');
-        startAdminMonitor();
+    if (!u || !p) {
+        error.innerText = "Please enter both fields.";
         return;
     }
 
+    // --- ADMIN GATE ---
+    if (u === "admin" && p === "admin123") {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-screen').classList.remove('hidden');
+        startAdminMonitor(); // Start fetching sensor data
+        return;
+    }
+
+    // --- USER GATE ---
     if (users[u]) {
-        // User exists, check password
+        // Check if existing user password matches
         if (users[u].password === p) {
-            currentUser = u;
-            showUserScreen();
+            loginUser(u);
         } else {
-            error.innerText = "Incorrect username/password. This name is already taken.";
+            // Error logic for "Username already taken"
+            error.innerText = "Incorrect username/password. This name is already registered.";
         }
     } else {
-        // New Registration
+        // Register new user
         users[u] = { password: p, points: 0 };
         localStorage.setItem('ecoUsers', JSON.stringify(users));
-        currentUser = u;
-        showUserScreen();
+        loginUser(u);
     }
 }
 
-function showUserScreen() {
-    showScreen('user-screen');
+function loginUser(name) {
+    currentUser = name;
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('user-screen').classList.remove('hidden');
     document.getElementById('user-display').innerText = currentUser;
     updatePointsDisplay();
 }
 
-// 3. Disposal and Point Logic
 async function dispose(type, pts) {
     try {
         const response = await fetch(`${espIP}/${type}`);
@@ -53,20 +64,20 @@ async function dispose(type, pts) {
             users[currentUser].points += pts;
             localStorage.setItem('ecoUsers', JSON.stringify(users));
             updatePointsDisplay();
-            alert(`Success! ${pts} points added.`);
+            alert(`Bin Rotating for ${type}! +${pts} Points.`);
         }
     } catch (e) {
-        alert("Check Bin Connection!");
+        alert("Connection Error: Is the ESP32 on?");
     }
 }
 
 function updatePointsDisplay() {
     const p = users[currentUser].points;
     document.getElementById('user-points').innerText = p;
+    // Show coupon at 100 points
     if(p >= 100) document.getElementById('reward-box').classList.remove('hidden');
 }
 
-// 4. Admin Logic (85% Alert)
 function startAdminMonitor() {
     setInterval(async () => {
         try {
@@ -77,17 +88,12 @@ function startAdminMonitor() {
             document.getElementById('gas').innerText = data.g;
             document.getElementById('dust').innerText = data.d;
 
+            // Admin Alert Logic for 85% Fill
             const alertBanner = document.getElementById('bin-alert');
             if (data.f >= 85) alertBanner.classList.remove('hidden');
             else alertBanner.classList.add('hidden');
-            
-        } catch (e) { console.log("ESP32 Offline"); }
+        } catch (e) { console.log("Admin Sync Error"); }
     }, 3000);
-}
-
-function showScreen(id) {
-    document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
 }
 
 function logout() { location.reload(); }
