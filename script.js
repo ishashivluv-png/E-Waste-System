@@ -1,83 +1,43 @@
-// 1. The IP address from your Arduino Serial Monitor
-const esp32_ip = "http://10.41.72.154"; 
+// REPLACE THIS IP WITH THE ONE FROM SERIAL MONITOR
+const espIP = "http://10.214.127.154"; 
 
-let totalPoints = 0;
-
-// Function to move from QR screen to Login
-function startSystem() {
-    document.getElementById('qr-container').style.display = 'none';
-    document.getElementById('login').style.display = 'block';
-}
-
-// Function to handle Login logic
-function login() {
-    let user = document.getElementById('username').value;
-    let pass = document.getElementById('password').value;
-
-    if (user === "admin" && pass === "123") {
-        showPage('adminPage');
-        startAdminMonitor(); // Start fetching sensor data
-    } else if (user !== "" && pass !== "") {
-        document.getElementById('userDisplay').innerText = user;
-        showPage('userPage');
-    } else {
-        alert("Please enter a username and password.");
+// 1. Function to send commands (Rotate Bin)
+async function sendCommand(type) {
+    const statusText = document.getElementById('status');
+    statusText.innerText = "Processing " + type + "... Please wait.";
+    
+    try {
+        const response = await fetch(`${espIP}/${type}`);
+        if (response.ok) {
+            statusText.innerText = "Bin ready! Insert waste now.";
+            document.getElementById('coupon-box').classList.remove('hidden');
+        }
+    } catch (error) {
+        statusText.innerText = "Error: Bin not found on network.";
+        console.error(error);
     }
 }
 
-// Helper to switch views
-function showPage(pageId) {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    document.getElementById('adminPage').style.display = 'none';
-    document.getElementById('userPage').style.display = 'none';
-    document.getElementById(pageId).style.display = 'block';
-}
+// 2. Function to fetch sensor data for Admin Dashboard
+async function updateDashboard() {
+    try {
+        const response = await fetch(`${espIP}/data`);
+        const data = await response.json();
 
-// FUNCTION: Sends waste type to ESP32 and updates points
-function submitWaste() {
-    let item = document.getElementById('item').value;
-    
-    // We send the command to the ESP32 (e.g., http://10.41.72.154/battery)
-    fetch(`${esp32_ip}/${item.toLowerCase()}`)
-    .then(response => {
-        if(response.ok) {
-            // Point logic based on your UI
-            let pts = 0;
-            if(item === "Battery") pts = 10;
-            else if(item === "PCB") pts = 20;
-            else if(item === "Mobile Phone") pts = 30;
-            else pts = 5;
+        document.getElementById('temp').innerText = data.t;
+        document.getElementById('fill').innerText = data.f;
+        document.getElementById('gas').innerText = data.g;
+        document.getElementById('dust').innerText = Math.round(data.d);
 
-            totalPoints += pts;
-            document.getElementById('points').innerText = "⭐ Total Points: " + totalPoints;
-            alert("Success! " + item + " compartment is opening.");
+        // Update status if bin is full
+        if(data.f >= 85) {
+            document.getElementById('status').innerText = "⚠️ BIN FULL - DO NOT USE";
+            document.getElementById('status').style.color = "red";
         }
-    })
-    .catch(err => {
-        alert("Cannot connect to Bin! Check if you are on the same Hotspot.");
-        console.error("Connection error:", err);
-    });
+    } catch (error) {
+        console.log("Dashboard update failed. Check connection.");
+    }
 }
 
-// FUNCTION: Fetches Temp, Gas, and Fill level for Admin
-function startAdminMonitor() {
-    setInterval(() => {
-        fetch(`${esp32_ip}/data`)
-        .then(res => res.json())
-        .then(data => {
-            // Updates the IDs in your Admin Dashboard
-            document.getElementById('temp').innerText = data.t; // Temperature
-            document.getElementById('gas').innerText = data.g;  // Gas
-            document.getElementById('level').innerText = data.f; // Fill %
-            
-            let alertMsg = document.getElementById('alert');
-            if(data.f > 85) {
-                alertMsg.innerHTML = "<p style='color:red; font-weight:bold;'>⚠️ ALERT: BIN FULL!</p>";
-            } else {
-                alertMsg.innerHTML = "";
-            }
-        })
-        .catch(e => console.log("Waiting for ESP32 data..."));
-    }, 3000); // Check every 3 seconds
-}
+// Update dashboard every 3 seconds
+setInterval(updateDashboard, 3000);
