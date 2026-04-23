@@ -3,57 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart E-Waste System</title>
+    <title>Eco-Smart E-Waste Bin</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
     <div id="qr-screen" class="container">
-        <h1>Scan to Start Recycling</h1>
+        <div class="eco-leaf">🌿</div>
+        <h1>Scan to Recycle</h1>
         <div id="qrcode"></div>
-        <p>Points System Active</p>
-        <button onclick="showLogin()">Login / Register</button>
+        <p>Join the Green Revolution</p>
+        <button class="btn-main" onclick="showLogin()">Get Started</button>
     </div>
 
     <div id="login-screen" class="container hidden">
-        <h2 id="form-title">Login / Register</h2>
-        <input type="text" id="username" placeholder="Enter Unique Username">
-        <input type="password" id="password" placeholder="Enter Password">
-        <p id="error-msg" style="color: red; font-size: 12px;"></p>
-        <button onclick="handleAuth()">Access Bin</button>
+        <h2>Welcome Back</h2>
+        <p>Enter details to access the bin</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <p id="error-msg" class="error"></p>
+        <button class="btn-main" onclick="handleAuth()">Login / Register</button>
     </div>
 
     <div id="admin-screen" class="container hidden">
-        <h2 style="color: #c0392b;">Admin Command Center</h2>
-        <div id="bin-alert" class="alert-banner hidden">⚠️ WARNING: BIN 85% FULL</div>
+        <h2 class="admin-title">Admin Monitor</h2>
+        <div id="bin-alert" class="alert-banner hidden">⚠️ BIN LEVEL 85% - ACTION REQUIRED</div>
+        
         <div class="stats-grid">
-            <div class="stat">Temp: <span id="temp">--</span>°C</div>
-            <div class="stat">Fill: <span id="fill">--</span>%</div>
-            <div class="stat">Gas: <span id="gas">--</span></div>
-            <div class="stat">Dust: <span id="dust">--</span></div>
+            <div class="stat"><span>Temperature</span><strong id="temp">--</strong>°C</div>
+            <div class="stat"><span>Bin Fill</span><strong id="fill">--</strong>%</div>
+            <div class="stat"><span>Gas Level</span><strong id="gas">--</strong></div>
+            <div class="stat"><span>Dust Index</span><strong id="dust">--</strong></div>
         </div>
-        <button class="logout" onclick="logout()">Exit</button>
+        <button class="btn-logout" onclick="logout()">Exit Dashboard</button>
     </div>
 
     <div id="user-screen" class="container hidden">
-        <h2>Eco-User: <span id="user-display"></span></h2>
+        <h2>Eco-Warrior: <span id="user-display"></span></h2>
+        
         <div class="point-circle">
             <span id="user-points">0</span>
-            <small>Points</small>
+            <small>GREEN POINTS</small>
         </div>
         
         <div class="button-grid">
-            <button class="btn-bat" onclick="dispose('battery', 20)">🔋 Battery (+20)</button>
-            <button class="btn-pcb" onclick="dispose('pcb', 30)">📟 PCB (+30)</button>
-            <button class="btn-oth" onclick="dispose('others', 25)">🔌 Others (+25)</button>
+            <button class="btn-eco" onclick="dispose('battery', 20)">🔋 Battery (+20)</button>
+            <button class="btn-eco" onclick="dispose('pcb', 30)">📟 PCB (+30)</button>
+            <button class="btn-eco" onclick="dispose('others', 25)">🔌 Others (+25)</button>
         </div>
 
         <div id="reward-box" class="reward hidden">
-            <h3>🎁 Reward Unlocked!</h3>
-            <p>Code: <strong>GREEN-100</strong></p>
+            <h3>🎉 REWARD UNLOCKED</h3>
+            <p>Your Eco-Coupon: <strong>GREEN-100</strong></p>
         </div>
-        <button class="logout" onclick="logout()">Logout</button>
+        <button class="btn-logout" onclick="logout()">Logout</button>
     </div>
 
     <script src="script.js"></script>
