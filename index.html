@@ -3,64 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Waste Management System</title>
+    <title>Smart E-Waste Bin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>Smart E-Waste Bin System</h1>
+        <p id="status">Connecting to Bin...</p>
+    </header>
 
-    <div id="qr-container" class="card">
-        <h1>E-Waste Bin System</h1>
-        <h2>Scan QR Code to Open System</h2>
-        <div id="qr">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://10.41.72.154" alt="System QR">
-        </div>
-        <p class="sub-text">Manage waste disposal from your mobile device.</p>
-        <button class="btn-green" onclick="startSystem()">Enter System</button>
-    </div>
-
-    <div id="login" class="card" style="display:none;">
-        <h2>System Login</h2>
-        <div class="input-group">
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-        </div>
-        <button class="btn-green" onclick="login()">Login</button>
-        <p id="login-error" class="error-text"></p>
-    </div>
-
-    <div id="main" style="display:none;">
-        
-        <div id="adminPage" class="card" style="display:none;">
-            <h2>Admin Dashboard</h2>
-            <div class="stats-container">
-                <div class="stat-item">🌡️ <strong>Temp:</strong> <span id="temp">--</span>°C</div>
-                <div class="stat-item">💨 <strong>Gas:</strong> <span id="gas">--</span></div>
-                <div class="stat-item">🗑️ <strong>Bin Level:</strong> <span id="level">--</span>%</div>
+    <main>
+        <section class="card">
+            <h2>Dispose Your Waste</h2>
+            <div class="button-grid">
+                <button onclick="sendCommand('battery')">🔋 Battery</button>
+                <button onclick="sendCommand('pcb')">📟 PCB / Circuit</button>
+                <button onclick="sendCommand('others')">🔌 Others</button>
             </div>
-            <div id="alert"></div>
-            <button class="btn-logout" onclick="location.reload()">Logout</button>
-        </div>
-
-        <div id="userPage" class="card" style="display:none;">
-            <h2>Welcome, <span id="userDisplay"></span></h2>
-            <p class="sub-text">Select the item you are disposing:</p>
-            
-            <select id="item">
-                <option value="battery">Battery (10 pts)</option>
-                <option value="pcb">PCB (20 pts)</option>
-                <option value="mobile">Mobile Phone (30 pts)</option>
-                <option value="others">Others (5 pts)</option>
-            </select>
-            
-            <button class="btn-green" onclick="submitWaste()">Submit Waste</button>
-
-            <div class="score-card">
-                <h3 id="points">⭐ Total Points: 0</h3>
-                <div class="reward-text">Points are added after each submission.</div>
+            <div id="coupon-box" class="hidden">
+                <p>Thank you! Your Coupon Code:</p>
+                <h3 id="coupon-code">EWaste-100-OFF</h3>
             </div>
-            <button class="btn-logout" onclick="location.reload()">Logout</button>
-        </div>
-    </div>
+        </section>
+
+        <section class="card admin">
+            <h2>Admin Real-Time Monitor</h2>
+            <div class="stats-grid">
+                <div class="stat">
+                    <span>Temperature</span>
+                    <strong id="temp">--</strong>°C
+                </div>
+                <div class="stat">
+                    <span>Bin Fill Level</span>
+                    <strong id="fill">--</strong>%
+                </div>
+                <div class="stat">
+                    <span>Gas Level</span>
+                    <strong id="gas">--</strong>
+                </div>
+                <div class="stat">
+                    <span>Dust (ug/m3)</span>
+                    <strong id="dust">--</strong>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
